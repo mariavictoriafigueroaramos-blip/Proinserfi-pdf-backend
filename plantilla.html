@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Cotización</title>
+<style>
+  :root{
+    --navy-900:#0A2A43;
+    --navy-800:#0F3A5C;
+    --cyan-500:#00AEC7;
+    --cyan-600:#0090A6;
+    --cyan-100:#E3F6F8;
+    --gray-700:#3D4A56;
+    --gray-600:#5B6B7A;
+    --gray-200:#E4E9ED;
+    --gray-50:#F7F9FA;
+    --white:#FFFFFF;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    padding:0 40px;
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    color: var(--gray-700);
+    font-size: 13px;
+    line-height:1.55;
+    background: var(--white);
+  }
+
+  /* ============================================================
+     PÁGINA 1 · PORTADA
+     ============================================================ */
+  .portada{
+    position:relative;
+    min-height: 100vh;
+    width:100%;
+    margin: 0 -40px; /* compensa el padding del body solo en la portada */
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding: 60px 50px;
+    page-break-after: always;   /* fuerza el salto de página antes del detalle */
+    background: linear-gradient(180deg, #FFFFFF 0%, #F5FAFB 100%);
+    overflow:hidden;
+  }
+
+  /* Anillos concéntricos: motivo decorativo inspirado en un rodamiento industrial */
+  .anillo{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    border-radius:50%;
+    pointer-events:none;
+  }
+  .anillo-1{ width:640px; height:640px; border:18px solid var(--cyan-500); opacity:0.05; }
+  .anillo-2{ width:480px; height:480px; border:2px solid var(--cyan-500); opacity:0.12; }
+  .anillo-3{ width:380px; height:380px; border:1px solid var(--navy-800); opacity:0.15; }
+
+  .logo-wrap{ position:relative; z-index:2; margin-bottom:26px; }
+  .logo-wrap img{ width:230px; max-width:60%; height:auto; }
+
+  .marca{
+    position:relative; z-index:2;
+    font-size:12px; letter-spacing:3px; text-transform:uppercase;
+    color: var(--navy-800); font-weight:700; margin:0 0 4px 0;
+  }
+  .marca-sub{
+    position:relative; z-index:2;
+    font-size:10.5px; letter-spacing:2px; text-transform:uppercase;
+    color: var(--cyan-600); font-weight:600; margin:0 0 34px 0;
+  }
+
+  .divisor{
+    position:relative; z-index:2;
+    width:70px; height:3px; margin:0 0 22px 0; border-radius:3px;
+    background: linear-gradient(90deg, var(--navy-800), var(--cyan-500));
+  }
+
+  .titulo-cotizacion{
+    position:relative; z-index:2;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 34px; color: var(--navy-900); margin:0; letter-spacing:0.5px;
+  }
+  .subtitulo-cotizacion{
+    position:relative; z-index:2;
+    font-size:13px; color: var(--gray-600); margin:10px 0 40px 0; letter-spacing:1px;
+  }
+
+  .ficha-cliente{
+    position:relative; z-index:2;
+    width:100%; max-width:420px; text-align:left;
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-left: 4px solid var(--cyan-500);
+    border-radius: 10px;
+    padding: 22px 26px;
+    box-shadow: 0 4px 18px rgba(10,42,67,0.06);
+  }
+  .ficha-cliente .eyebrow{
+    font-size:10px; letter-spacing:2px; text-transform:uppercase;
+    color: var(--cyan-600); font-weight:700; margin:0 0 8px 0;
+  }
+  .ficha-cliente .cliente-nombre{
+    font-size:18px; color: var(--navy-900); font-weight:700; margin:0;
+  }
+
+  .footer-portada{
+    position:relative; z-index:2;
+    margin-top:46px; font-size:10.5px; color: var(--gray-600); letter-spacing:0.5px;
+  }
+
+  /* ============================================================
+     PÁGINA 2 · ENCABEZADO DE DETALLE
+     ============================================================ */
+  .header-detalle{
+    display:flex; align-items:center; justify-content:space-between;
+    border-bottom: 2px solid var(--navy-900);
+    padding-bottom:14px; margin-bottom:26px;
+  }
+  .header-detalle .marca-mini{ display:flex; align-items:center; gap:12px; }
+  .header-detalle img{ width:46px; height:auto; }
+  .header-detalle .marca-mini-texto{
+    font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+    color: var(--navy-900);
+  }
+  .header-detalle .ref-doc{ text-align:right; font-size:11.5px; color: var(--gray-600); }
+  .header-detalle .ref-doc strong{ color: var(--navy-900); font-size:13px; }
+
+  /* Títulos de sección */
+  .seccion-titulo{ display:flex; align-items:center; gap:10px; margin:30px 0 14px 0; }
+  .seccion-titulo .barra{
+    width:5px; height:18px; border-radius:3px;
+    background: linear-gradient(180deg, var(--navy-800), var(--cyan-500));
+  }
+  .seccion-titulo h2{
+    font-size:14px; letter-spacing:1px; text-transform:uppercase;
+    color: var(--navy-900); margin:0;
+  }
+
+  /* ============================================================
+     TABLA DE COTIZACIÓN
+     ============================================================ */
+  table.tabla-cotizacion{
+    width:100%;
+    border-collapse: separate;
+    border-spacing:0;
+    border-radius:10px;
+    overflow:hidden;
+    border: 1px solid var(--gray-200);
+  }
+  table.tabla-cotizacion thead{ display: table-header-group; } /* repite encabezado si la tabla salta de página */
+  table.tabla-cotizacion th{
+    background: var(--navy-900);
+    color: var(--white);
+    font-size:10.5px; letter-spacing:1px; text-transform:uppercase;
+    text-align:left; font-weight:600; padding:12px 14px;
+  }
+  table.tabla-cotizacion th.num, table.tabla-cotizacion td.num{ text-align:right; }
+  table.tabla-cotizacion td{
+    padding:10px 14px; font-size:12.5px; color: var(--gray-700);
+    border-bottom: 1px solid var(--gray-200);
+  }
+  table.tabla-cotizacion tbody tr{ page-break-inside: avoid; }
+  table.tabla-cotizacion tbody tr:nth-child(even){ background: var(--gray-50); }
+  table.tabla-cotizacion tbody tr:last-child td{ border-bottom:none; }
+
+  /* ============================================================
+     TOTALES
+     ============================================================ */
+  .bloque-totales{ display:flex; justify-content:flex-end; margin-top:20px; }
+  .tarjeta-totales{ width:280px; border:1px solid var(--gray-200); border-radius:10px; overflow:hidden; }
+  .fila-total{
+    display:flex; justify-content:space-between;
+    padding:10px 18px; font-size:12.5px; color: var(--gray-600);
+    background: var(--white); border-bottom:1px solid var(--gray-200);
+  }
+  .fila-total.total-final{
+    background: var(--navy-900); color: var(--white);
+    font-size:15px; font-weight:700; border-bottom:none; padding:14px 18px;
+  }
+  .fila-total.total-final span:first-child{
+    letter-spacing:1px; text-transform:uppercase; font-size:12px; font-weight:600;
+  }
+
+  /* ============================================================
+     OBSERVACIONES
+     ============================================================ */
+  .nota-observaciones{
+    margin-top:34px;
+    background: var(--cyan-100);
+    border-left: 4px solid var(--cyan-500);
+    border-radius:8px;
+    padding:16px 20px;
+  }
+  .nota-observaciones .etiqueta{
+    font-size:10px; letter-spacing:2px; text-transform:uppercase;
+    color: var(--cyan-600); font-weight:700; margin:0 0 8px 0;
+  }
+  .nota-observaciones p{ font-size:12px; color: var(--gray-700); margin:0; line-height:1.7; }
+
+  /* ============================================================
+     PIE DE PÁGINA DE DETALLE
+     ============================================================ */
+  .footer-detalle{
+    margin-top:50px; text-align:center; padding-top:18px;
+    border-top: 1px solid var(--gray-200);
+  }
+  .footer-detalle .agradecimiento{ font-size:12.5px; color: var(--navy-900); font-weight:700; margin:0 0 4px 0; }
+  .footer-detalle .empresa{ font-size:10.5px; color: var(--gray-600); letter-spacing:0.5px; margin:0; }
+</style>
+</head>
+<body>
+
+  <!-- ======================= PÁGINA 1: PORTADA ======================= -->
+  <div class="portada">
+    <div class="anillo anillo-1"></div>
+    <div class="anillo anillo-2"></div>
+    <div class="anillo anillo-3"></div>
+
+    <div class="logo-wrap">
+      <img src="https://drive.google.com/uc?export=view&id=13slk4KSUAa3t-U_nvoOAJcl1lFZ9FyEC" alt="Logo">
+    </div>
+
+    <p class="marca">Ferretería y Rodamientos Industriales</p>
+    <p class="marca-sub">Soluciones industriales de confianza</p>
+
+    <div class="divisor"></div>
+
+    <h1 class="titulo-cotizacion">Cotización Comercial</h1>
+    <p class="subtitulo-cotizacion">
+      Nº <?= datos.correlativo ?> &nbsp;·&nbsp; Fecha: <?= datos.fecha ?>
+    </p>
+
+    <div class="ficha-cliente">
+      <p class="eyebrow">Preparado para</p>
+      <p class="cliente-nombre"><?= datos.cliente ?></p>
+    </div>
+
+    <p class="footer-portada">Documento generado automáticamente&nbsp;|&nbsp;Válido por 7 días</p>
+  </div>
+
+  <!-- ======================= PÁGINA 2: DETALLE ======================= -->
+
+  <div class="header-detalle">
+    <div class="marca-mini">
+      <img src="https://drive.google.com/uc?export=view&id=13slk4KSUAa3t-U_nvoOAJcl1lFZ9FyEC" alt="Logo">
+      <span class="marca-mini-texto">Ferretería y Rodamientos Industriales</span>
+    </div>
+    <div class="ref-doc">
+      <strong>Cotización Nº <?= datos.correlativo ?></strong><br>
+      Fecha: <?= datos.fecha ?>
+    </div>
+  </div>
+
+  <div class="seccion-titulo">
+    <div class="barra"></div>
+    <h2>Detalle de Cotización</h2>
+  </div>
+
+  <table class="tabla-cotizacion">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Descripción</th>
+        <th class="num">Cantidad</th>
+        <th class="num">Precio</th>
+        <th class="num">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <? for (let i=0; i<datos.items.length; i++) { ?>
+        <tr>
+          <td><?= datos.items[i].codigo ?></td>
+          <td><?= datos.items[i].descripcion ?></td>
+          <td class="num"><?= datos.items[i].cantidad ?></td>
+          <td class="num"><?= datos.items[i].precio ?></td>
+          <td class="num"><?= datos.items[i].total ?></td>
+        </tr>
+      <? } ?>
+    </tbody>
+  </table>
+
+  <div class="bloque-totales">
+    <div class="tarjeta-totales">
+      <div class="fila-total">
+        <span>Subtotal</span>
+        <span><?= datos.subtotal ?></span>
+      </div>
+      <div class="fila-total">
+        <span>IVA</span>
+        <span><?= datos.iva ?></span>
+      </div>
+      <div class="fila-total total-final">
+        <span>Total</span>
+        <span><?= datos.total ?></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="nota-observaciones">
+    <p class="etiqueta">Observaciones</p>
+    <p>
+      Esta cotización es válida por 7 días.<br>
+      Los precios pueden variar según disponibilidad.<br>
+      La entrega se coordina directamente con el cliente.
+    </p>
+  </div>
+
+  <div class="footer-detalle">
+    <p class="agradecimiento">Gracias por su preferencia</p>
+    <p class="empresa">Ferretería y Rodamientos Industriales</p>
+  </div>
+
+</body>
+</html>
