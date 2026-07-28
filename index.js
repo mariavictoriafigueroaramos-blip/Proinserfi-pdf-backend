@@ -1,7 +1,7 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const puppeteer = require("puppeteer");
+import express from "express";
+import bodyParser from "body-parser";
+import cors from "cors";
+import puppeteer from "puppeteer";
 
 const app = express();
 app.use(cors());
@@ -9,21 +9,21 @@ app.use(bodyParser.json({ limit: "10mb" }));
 
 app.post("/generar-pdf", async (req, res) => {
   try {
-    const datos = req.body;
+    const { html, css } = req.body;
 
-    const html = `
+    if (!html || !css) {
+      return res.status(400).send("Faltan html o css");
+    }
+
+    const contenido = `
       <!DOCTYPE html>
       <html>
       <head>
         <meta charset="UTF-8">
         <title>Cotización</title>
-        <style>
-          ${datos.css}
-        </style>
+        <style>${css}</style>
       </head>
-      <body>
-        ${datos.html}
-      </body>
+      <body>${html}</body>
       </html>
     `;
 
@@ -33,7 +33,7 @@ app.post("/generar-pdf", async (req, res) => {
     });
 
     const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: "networkidle0" });
+    await page.setContent(contenido, { waitUntil: "networkidle0" });
 
     const pdf = await page.pdf({
       format: "A4",
